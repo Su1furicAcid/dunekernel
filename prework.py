@@ -4,6 +4,7 @@ from exception import CG
 from utils import Env
 import json
 import shutil
+import pkgutil
 
 @CG.catch
 def prework(job: gg.Job):
@@ -41,15 +42,25 @@ def prework(job: gg.Job):
     if create_dune_result.returncode != 0:
         raise CG.CompileError(create_dune_result.stdout + '\n' + create_dune_result.stderr)
     
-    # 把当前 python 文件夹路径下 dune_config 里对应的文件复制到项目目录
-    with open(os.path.join("dune_config", "config.json"), "r") as f:
-        config_json = json.load(f)
-        for file in config_json["files"]:
-            src = os.path.join("dune_config", file)
-            dst = os.path.join(project_dir, file)
-            if not os.path.exists(os.path.dirname(dst)):
-                os.makedirs(os.path.dirname(dst))
-            shutil.copy(src, dst)
+    # 使用 pkgutil.get_data 读取 config.json
+    config_data = pkgutil.get_data(__name__, "dune_config/config.json")
+    if not config_data:
+        raise FileNotFoundError("Config file not found in the package: dune_config/config.json")
+
+    # 解析 JSON 数据
+    config_json = json.loads(config_data.decode("utf-8"))
+
+    # 遍历并复制文件到项目目录
+    for file in config_json["files"]:
+        file_data = pkgutil.get_data(__name__, f"dune_config/{file}")
+        if not file_data:
+            raise FileNotFoundError(f"File not found in the package: dune_config/{file}")
+        
+        dst = os.path.join(project_dir, file)
+        if not os.path.exists(os.path.dirname(dst)):
+            os.makedirs(os.path.dirname(dst))
+        with open(dst, "wb") as f:
+            f.write(file_data)
 
     # 复制提交文件到项目的 /lib 目录
     for file in os.listdir(config["submit_dir"]):

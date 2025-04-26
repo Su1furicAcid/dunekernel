@@ -4,6 +4,7 @@
         ["dune-project"],
         ["bin", "dune"],
         ["bin", "main.ml"],
-        ["lib", "dune"]
+        ["lib", "dune"],
+        ["lib", "test.mli"]
     ]
 }

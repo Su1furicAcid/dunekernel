@@ -1,4 +1,4 @@
-open Lib
+open Lib.Test
 
 let () =
   let a = read_int () in

@@ -29,7 +29,6 @@ def prework(job: gg.Job):
     # 检查 dune 是否安装
     check_dune_cmd = "dune --version"
     check_dune_result = gg.utils.exec(check_dune_cmd)
-    print(check_dune_result.stdout)
     if check_dune_result.returncode != 0:
         raise CG.CompileError("Dune is not installed or not found in PATH")
 
@@ -53,7 +52,6 @@ def prework(job: gg.Job):
     config_json = json.loads(config_data.decode("utf-8"))
 
     # 遍历并复制文件到项目目录
-    # 遍历并复制文件到项目目录
     for file_path in config_json["files"]:
         # 将路径数组拼接成文件路径
         relative_path = os.path.join(*file_path)
@@ -70,17 +68,6 @@ def prework(job: gg.Job):
         # 写入文件
         with open(dst, "wb") as f:
             f.write(file_data)
-        print(f"Copied {relative_path} to {dst}")
-
-    # 检查 main.ml 内容是什么
-    main_file = os.path.join(project_dir, "bin", "main.ml")
-    print("main.ml content:")
-    with open(main_file, "r") as f:
-        main_content = f.read()
-        print(main_content)
-
-    print("Submit directory:", config["submit_dir"])
-    print("Files in submit directory:", os.listdir(config["submit_dir"]))
 
     # 复制提交文件到项目的 /lib 目录
     for file in os.listdir(config["submit_dir"]):
@@ -98,19 +85,6 @@ def prework(job: gg.Job):
     if compile_result.returncode != 0:
         raise CG.CompileError(compile_result.stdout + '\n' + compile_result.stderr)
     
-    # 检查 main.ml 内容是什么
-    main_file = os.path.join(project_dir, "bin", "main.ml")
-    print("main.ml content:")
-    with open(main_file, "r") as f:
-        main_content = f.read()
-        print(main_content)
-    
-    # 输出编译后的文件结构
-    print("Compiled files:")
-    for root, dirs, files in os.walk(project_dir):
-        for file in files:
-            print(os.path.join(root, file))
-
     # 获取编译后的可执行文件路径
     exec_src = os.path.join(project_dir, "_build", "default", "bin", "main.exe")
     if not os.path.exists(exec_src):

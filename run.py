@@ -32,6 +32,9 @@ def run(job: gg.Job, testcase: gg.TestCases.SingleTestCase) -> dict:
     with open(output_file, 'r') as f:
         expected_output = f.read()
 
+    print("expected output ", expected_output)
+    print("program output ", run_result.stdout)
+
     # 比较输出
     if gg.utils.compare_str(expected_output, run_result.stdout):
         result['verdict'] = Verdict.Accept

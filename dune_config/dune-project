@@ -1,6 +1,2 @@
-(lang dune 3.0)
-
+(lang dune 3.18)
 (name test_project)
-
-(using library 0.1)
-(using executable 0.1)

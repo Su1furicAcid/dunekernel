@@ -1,9 +1,9 @@
 {
     "name": "dune_config",
     "files": [
-        "/dune-project",
-        "/bin/dune",
-        "/bin/main.ml",
-        "/lib/dune"
+        ["dune-project"],
+        ["bin", "dune"],
+        ["bin", "main.ml"],
+        ["lib", "dune"]
     ]
 }

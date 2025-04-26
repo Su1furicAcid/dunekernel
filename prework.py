@@ -12,6 +12,25 @@ def prework(job: gg.Job):
     if len(os.listdir(config['submit_dir'])) == 0:
         raise CG.CompileError("No submit file")
     
+    # 检查 opam 是否安装了 dune
+    check_opam_cmd = "opam list --installed | grep dune"
+    gg.utils.exec(check_opam_cmd)
+
+    # 检查 dune 的安装路径
+    find_dune_cmd = "find ~/.opam -name dune"
+    gg.utils.exec(find_dune_cmd)
+
+    # 手动添加 dune 的路径到 PATH
+    dune_path = os.path.join(os.path.expanduser("~"), ".opam", "default", "bin")
+    if dune_path not in os.environ["PATH"]:
+        os.environ["PATH"] += os.pathsep + dune_path
+
+    # 检查 dune 是否安装
+    check_dune_cmd = "dune --version"
+    check_dune_result = gg.utils.exec(check_dune_cmd)
+    if check_dune_result.returncode != 0:
+        raise CG.CompileError("Dune is not installed or not found in PATH")
+
     # 创建一个临时dune项目
     project_dir = os.path.join(config['exec_dir'], "dune_project")
     if not os.path.exists(project_dir):

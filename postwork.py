@@ -9,8 +9,6 @@ def postwork(job: gg.Job):
     verdict = make_verdict([x['verdict'] for x in summary])
     job.verdict(verdict)
     job.score(score)
-    rank = job.get_total_time() if score == 100 else 0
-    job.rank({"rank": rank})
 
     job.comment(make_table(summary, ['name', 'verdict', 'score']))
     details = ""

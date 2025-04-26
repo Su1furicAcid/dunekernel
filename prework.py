@@ -37,11 +37,11 @@ def prework(job: gg.Job):
     if not os.path.exists(create_project_dir):
         os.makedirs(create_project_dir)
     os.chdir(create_project_dir)
-    create_dune_cmd = "dune init project test_project"
+    create_dune_cmd = "dune init project {}".format(config["temp_proj_name"])
     create_dune_result = gg.utils.exec(create_dune_cmd)
     if create_dune_result.returncode != 0:
         raise CG.CompileError(create_dune_result.stdout + '\n' + create_dune_result.stderr)
-    project_dir = os.path.join(create_project_dir, "test_project")
+    project_dir = os.path.join(create_project_dir, config["temp_proj_name"])
 
     # 使用 pkgutil.get_data 读取 config.json
     config_data = pkgutil.get_data(__name__, "dune_config/config.json")

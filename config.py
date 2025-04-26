@@ -7,5 +7,6 @@ KERNEL_CONFIG = {
     'return_code': 0,
     "exec_dir": tempfile.mkdtemp(),
     "source_ext": ".ml",
-    "exec_src": ""
+    "exec_src": "",
+    "temp_proj_name": "test_project"
 }

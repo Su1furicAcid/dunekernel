@@ -7,7 +7,7 @@ def run(job: gg.Job, testcase: gg.TestCases.SingleTestCase) -> dict:
     config = job.get_config()
 
     # 创建一个结果对象
-    result = {'name': testcase.name, 'score': 0, 'verdict': Verdict.WrongAnswer}
+    result = {'name': testcase.name, 'score': 0, 'verdict': Verdict.WrongAnswer, 'return_code': config['return_code'], 'stderr': ''}
 
     # 获取测试用例的输入和输出文件路径
     input_file = testcase.input_src
